@@ -3,3 +3,4 @@ djangorestframework
 environs
 djangorestframework-simplejwt
 psycopg[binary]
+python-dotenv

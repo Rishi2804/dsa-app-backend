@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    'users',
     'rest_framework',
 ]
 
@@ -74,6 +75,8 @@ WSGI_APPLICATION = 'dsaBackend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR / '.env')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -122,7 +125,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-AUTH_USER_MODEL = 'api.User' 
+AUTH_USER_MODEL = 'users.User' 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

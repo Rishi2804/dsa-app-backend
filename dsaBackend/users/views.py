@@ -1,14 +1,22 @@
 from django.shortcuts import render
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer, UserUpdateSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import status, generics
 from rest_framework.decorators import api_view
 
-@api_view(['POST'])
-def registerUser(request):
-    serializer = UserRegistrationSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserRegisterView(generics.CreateAPIView):
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [AllowAny]
 
+class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+    
+    def delete(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return Response({"detail": "User account deleted."}, status=status.HTTP_204_NO_CONTENT)
